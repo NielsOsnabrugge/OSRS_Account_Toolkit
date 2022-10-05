@@ -53,13 +53,10 @@ public class AccountCreator {
     }
 
     private static void block_resources(Route route){
-        System.out.println("---");
-
         if(excludedResourceTypes.contains(route.request().resourceType())){
             route.abort();
         }
         else{
-            System.out.println(route.request().resourceType());
             route.resume();
         }
     }
@@ -103,24 +100,22 @@ public class AccountCreator {
         return Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, targetWidth, targetHeight, Scalr.OP_ANTIALIAS);
     }
 
-
-    public static float[][][] converToPixels(BufferedImage img){
-        BufferedImage resizedImg = resizeImage(img, 320, 320);
-        resizedImg = img;
-        int width = resizedImg.getWidth(null);
-        int height = resizedImg.getHeight(null);
-
-        float[][][] RGB = new float[height][width][3];
+    public static int[][][] converToPixels(BufferedImage img){
+        int width = img.getWidth(null);
+        int height = img.getHeight(null);
+        System.out.println(width);
+        System.out.println(height);
+        int[][][] RGB = new int[height][width][3];
 
         for(int w = 0; w < width; w++)
         {
             for(int h = 0; h < height; h++)
             {
                 //Uses the Java color class to do the conversion from int to RGB
-                Color temp = new Color(resizedImg.getRGB(w, h));
-                RGB[h][w][0] = temp.getRed() / 255f;
-                RGB[h][w][1] = temp.getGreen() / 255f;
-                RGB[h][w][2] = temp.getBlue() / 255f;
+                Color temp = new Color(img.getRGB(w, h));
+                RGB[h][w][0] = temp.getRed();
+                RGB[h][w][1] = temp.getGreen();
+                RGB[h][w][2] = temp.getBlue();
             }
         }
         return RGB;
@@ -133,8 +128,7 @@ public class AccountCreator {
                 .setPath(imagePath));
         BufferedImage image = AccountCreator.getImageFromPath(imagePath.toString());
 
-        float[][][] rgb = AccountCreator.converToPixels(image);
-
+        int[][][] rgb = AccountCreator.converToPixels(image);
         int[] predictions = CaptchaSolver.createPrediction(rgb, 1);
         return predictions[0];
     }
@@ -202,16 +196,16 @@ public class AccountCreator {
                 }
             }
             exampleImage = exampleImage.first().locator(".image").first();
-            int actual = getClassPrediction(exampleImage);
-
+//            int actual = getClassPrediction(exampleImage);
+//            System.out.println(actual);
             Locator wrappers = iframeImages.locator(".image-wrapper");
             for(int i =0; i<wrappers.count(); i++){
                 Locator imageChild = wrappers.nth(i).locator(".image");
                 int prediction = getClassPrediction(imageChild);
-                if(actual == prediction){
-                    // Click on it
-                }
-                imageChild.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+                System.out.println(prediction);
+//                if(actual == prediction){
+//                    // Click on it
+//                }
             }
         }
         catch (Exception e) {
