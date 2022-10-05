@@ -25,8 +25,9 @@ public class CaptchaSolver {
 
     private static final Path labelsPath = Paths.get("").toAbsolutePath().resolve("src\\main\\api\\utilities\\labels.txt");
 
-    public static int[] createPrediction(float[][][] rgb, int topAmount) {
+    public static int[] createPrediction(int[][][] rgb, int topAmount) {
         JSONArray predictions = createPredictionPostRequest(rgb);
+        System.out.println(predictions);
         int[] topX = getTopXPredictions(predictions, topAmount);
 
         return topX;
@@ -125,7 +126,7 @@ public class CaptchaSolver {
         return topX;
     }
 
-    private static JSONArray createPredictionPostRequest(float[][][] rgb){
+    private static JSONArray createPredictionPostRequest(int[][][] rgb){
         String payload =
                 "{" +
                         "\"signature_name\": \"serving_default\", " +
@@ -145,6 +146,7 @@ public class CaptchaSolver {
             e.printStackTrace();
         }
         JSONObject obj = new JSONObject(json_string);
+        System.out.println(obj);
         return obj.getJSONArray("predictions").optJSONArray(0);
     }
 }
