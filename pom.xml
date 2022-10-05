@@ -39,21 +39,35 @@
             <version>1.25.0</version>
         </dependency>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 0e07cd2 (initial commit)
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.30</version>
         </dependency>
+<<<<<<< HEAD
 >>>>>>> f27925f (fully working acc creator)
+=======
+=======
+>>>>>>> c981a65 (initial commit)
+>>>>>>> 0e07cd2 (initial commit)
     </dependencies>
     <build>
         <plugins>
             <plugin>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> f27925f (fully working acc creator)
+=======
+
+=======
+>>>>>>> c981a65 (initial commit)
+>>>>>>> 0e07cd2 (initial commit)
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>

@@ -1,4 +1,4 @@
-import browser.AccountChecker;
+
 import browser.AccountCreator;
 import com.microsoft.playwright.*;
 import data.Account;
@@ -7,8 +7,8 @@ import data.Proxy;
 import data.results.CreateAccountResult;
 import utilities.CaptchaSolver;
 import utilities.DataGenerator;
-
 import utilities.DatabaseAPI;
+
 import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -31,30 +31,16 @@ public class Example {
                 DataGenerator.password(),
                 DataGenerator.dateOfBirth(),
                 AccountStatus.UNKOWN);
-
 //        boolean success = AccountCreator.createAccount(acc, null);
 //        if(success){
 //            DatabaseAPI.InsertAccount(acc);
 //        }
 
 
-        acc = new Account(
-                DataGenerator.username(),
-                "odaveSh@jeoco.xyz",
-                "zty5g934fb3n",
-                DataGenerator.dateOfBirth(),
-                AccountStatus.UNKOWN);
-        AccountStatus status = AccountChecker.checkAccount(acc, null);
-        System.out.println(status);
-    }
 
-    private static Account getBannedAccount(){
-        return new Account(
-                DataGenerator.username(),
-                "xXvlBzFPoTsVZqFmURLQyi@gmail.com",
-                "WQhGycAZszTUtugbNUkgbWNCZq",
-                DataGenerator.dateOfBirth(),
-                AccountStatus.UNKOWN);
+        AccountCreator.createAccount(acc, null);
+        Proxy proxy = new Proxy("207.228.36.188");
+        Proxy proxy2 = new Proxy("207.228.41.51:49767", "h2AtsPDH2umTpme", "iu6hhMphWuhW6xZ");
     }
 
     private void temp(){
