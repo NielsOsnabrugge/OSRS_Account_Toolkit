@@ -147,7 +147,7 @@ public class CaptchaSolver {
             e.printStackTrace();
         }
         JSONObject obj = new JSONObject(json_string);
-        
+
         return obj.getJSONArray("predictions").optJSONArray(0);
     }
 }

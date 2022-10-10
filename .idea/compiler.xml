@@ -6,34 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         <module name="OSRS_Account_Toolkit-main" />
->>>>>>> f27925f (fully working acc creator)
-=======
-        <module name="OSRS_Account_Toolkit-main" />
-=======
->>>>>>> c981a65 (initial commit)
->>>>>>> 0e07cd2 (initial commit)
-        <module name="OSRS_Account_Toolkit" />
       </profile>
     </annotationProcessing>
   </component>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 0e07cd2 (initial commit)
+
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="OSRS_Account_Toolkit-main" options="--add-modules java.sql,java.desktop" />
     </option>
   </component>
-<<<<<<< HEAD
->>>>>>> f27925f (fully working acc creator)
-=======
-=======
->>>>>>> c981a65 (initial commit)
->>>>>>> 0e07cd2 (initial commit)
+
 </project>

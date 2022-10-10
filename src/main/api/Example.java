@@ -35,12 +35,7 @@ public class Example {
 //        if(success){
 //            DatabaseAPI.InsertAccount(acc);
 //        }
-
-
-
         AccountCreator.createAccount(acc, null);
-        Proxy proxy = new Proxy("207.228.36.188");
-        Proxy proxy2 = new Proxy("207.228.41.51:49767", "h2AtsPDH2umTpme", "iu6hhMphWuhW6xZ");
     }
 
     private void temp(){
