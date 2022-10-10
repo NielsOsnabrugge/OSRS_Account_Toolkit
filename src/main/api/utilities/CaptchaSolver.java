@@ -27,9 +27,7 @@ public class CaptchaSolver {
 
     public static int[] createPrediction(int[][][] rgb, int topAmount) {
         JSONArray predictions = createPredictionPostRequest(rgb);
-        System.out.println(predictions);
         int[] topX = getTopXPredictions(predictions, topAmount);
-
         return topX;
     }
 
@@ -97,12 +95,6 @@ public class CaptchaSolver {
     private static int[] getTopXPredictions(JSONArray predictions, int am){
         int[] topX = new int[am];
         Arrays.fill(topX, 0);
-        List<String> names = null;
-        try {
-            names = new ArrayList<>(Files.readAllLines(labelsPath, StandardCharsets.ISO_8859_1));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         for (int i = 0; i < predictions.length(); ++i) {
             float current = predictions.optFloat(i);
@@ -146,7 +138,7 @@ public class CaptchaSolver {
             e.printStackTrace();
         }
         JSONObject obj = new JSONObject(json_string);
-        System.out.println(obj);
+
         return obj.getJSONArray("predictions").optJSONArray(0);
     }
 }

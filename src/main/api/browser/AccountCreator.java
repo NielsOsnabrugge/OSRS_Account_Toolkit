@@ -1,11 +1,8 @@
 package browser;
-
-import com.microsoft.playwright.Frame;
-import com.microsoft.playwright.options.LoadState;
+import static browser.BrowserOptions.*;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import data.Account;
 import data.Proxy;
-import data.results.CreateAccountResult;
 import com.microsoft.playwright.*;
 import org.imgscalr.Scalr;
 import utilities.CaptchaSolver;
@@ -13,62 +10,13 @@ import utilities.CaptchaSolver;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.PixelGrabber;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.channels.Selector;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class AccountCreator {
-    private static final Set<String> excludedResourceTypes = Set.of("stylesheet", "font", "media");
-
-
-    private static BrowserType.LaunchOptions GetLaunchOptions(Proxy proxy){
-        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
-        launchOptions.timeout = (double)90000;
-        launchOptions.headless = false;
-
-        if (proxy != null){
-            com.microsoft.playwright.options.Proxy playwrightProxy = new com.microsoft.playwright.options.Proxy(proxy.getIp());
-            if (proxy.getUsername() != null){
-                playwrightProxy.setUsername(proxy.getUsername());
-                playwrightProxy.setPassword(proxy.getPassword());
-            }
-
-            launchOptions.setProxy(playwrightProxy);
-        }
-
-        return launchOptions;
-    }
-
-    private static void block_resources(Route route){
-        if(excludedResourceTypes.contains(route.request().resourceType())){
-            route.abort();
-        }
-        else{
-            route.resume();
-        }
-    }
-
-    private static void block_resources_except_image(Route route){
-        if(excludedResourceTypes.contains(route.request().resourceType()) && !route.request().resourceType().equals("image")){
-            route.abort();
-        }
-        else{
-            route.resume();
-        }
-    }
-
     private static String getImageUrlInLocator(Locator locator){
         String url = "";
         for(int i =0; i<locator.count(); i++){
@@ -91,6 +39,9 @@ public class AccountCreator {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        if(image.getWidth() != 120){
+            image = resizeImage(image, 120, 1200);
+        }
         return image;
     }
     private  static BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
@@ -100,8 +51,6 @@ public class AccountCreator {
     public static int[][][] converToPixels(BufferedImage img){
         int width = img.getWidth(null);
         int height = img.getHeight(null);
-        System.out.println(width);
-        System.out.println(height);
         int[][][] RGB = new int[height][width][3];
 
         for(int w = 0; w < width; w++)
@@ -132,12 +81,11 @@ public class AccountCreator {
 
     public static boolean createAccount(Account account, Proxy proxy){
         try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.firefox().launch(GetLaunchOptions(proxy));
-            BrowserContext context = browser.newContext();
-            context.route("**/*", AccountCreator::block_resources);
+            Browser browserOptions = playwright.firefox().launch(GetLaunchOptions(proxy, false));
+            BrowserContext context = browserOptions.newContext();
+            context.route("**/*", BrowserOptions::block_resources);
             Page page = context.newPage();
 
-//            page.route("**/*", AccountCreator::block_resources);
             page.navigate("https://secure.runescape.com/m=account-creation/create_account?theme=oldschool");
             System.out.println(page.title());
             Locator cookieButton = page.locator("#CybotCookiebotDialogBodyButtonDecline");
@@ -173,8 +121,9 @@ public class AccountCreator {
 
             Locator submitButton = page.locator("#create-submit");
             submitButton.click();
-
+            System.out.println("X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-");
             Locator pleaseWaitText = page.locator("#cf-spinner-please-wait");
+
             pleaseWaitText.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
             page.waitForSelector("[title='widget containing checkbox for hCaptcha security challenge'] >> visible=true");
@@ -193,19 +142,23 @@ public class AccountCreator {
                     exampleImage = iframeImages.locator(".challenge-example");
                 }
             }
+            TimeUnit.SECONDS.sleep(1);
             exampleImage = exampleImage.first().locator(".image").first();
-//            int actual = getClassPrediction(exampleImage);
-//            System.out.println(actual);
-            Locator wrappers = iframeImages.locator(".image-wrapper");
-            for(int i =0; i<wrappers.count(); i++){
-                Locator imageChild = wrappers.nth(i).locator(".image");
-                int prediction = getClassPrediction(imageChild);
-                System.out.println(prediction);
-//                if(actual == prediction){
-//                    // Click on it
-//                }
-            }
+            int actual = getClassPrediction(exampleImage);
+            for(int j=0; j<2; j++){
+                Locator wrappers = iframeImages.locator(".task-image");
+                for(int i =0; i<wrappers.count(); i++){
+                    Locator imageChild = wrappers.nth(i).locator(".image");
+                    int prediction = getClassPrediction(imageChild);
+                    if(actual == prediction){
+                        wrappers.nth(i).click();
+                    }
+                }
 
+                Locator nextButton = iframeImages.locator(".button-submit");
+                nextButton.click();
+            }
+            page.waitForSelector("[id='p-account-created'] >> visible=true");
         }
         catch (Exception e) {
             e.printStackTrace();
