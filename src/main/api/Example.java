@@ -31,14 +31,13 @@ public class Example {
                 DataGenerator.password(),
                 DataGenerator.dateOfBirth(),
                 AccountStatus.UNKOWN);
-//        boolean success = AccountCreator.createAccount(acc, null);
-//        if(success){
-//            DatabaseAPI.InsertAccount(acc);
-//        }
-        AccountCreator.createAccount(acc, null);
+       boolean success = AccountCreator.createAccount(acc, null);
+       if(success){
+           DatabaseAPI.InsertAccount(acc);
+       }
     }
 
-    private void temp(){
+    private void createAccountNordVpn(){
         Account acc = new Account(
                 DataGenerator.username(),
                 DataGenerator.emailAddress("jeoco.xyz"),
@@ -48,9 +47,6 @@ public class Example {
         for(int j=0; j<1000; j++){
             Runtime runtime = Runtime.getRuntime();
             try {
-//                Process p1 = runtime.exec("cmd /c nordvpn -c -g \"Thailand\"");
-//                InputStream is = p1.getInputStream();
-//                TimeUnit.SECONDS.sleep(5);
                 Process p1 = runtime.exec("cmd /c nordvpn -c -g \"Netherlands\"");
                 InputStream is = p1.getInputStream();
                 TimeUnit.SECONDS.sleep(10);
@@ -63,42 +59,6 @@ public class Example {
                     break;
                 }
             }
-        }
-    }
-
-    private static void filterTextFile(){
-        String[] words = new String[]{"nigger", "cock", "dick", "fuck", "cancer", "pussy", "throw", "penis", "porn", "cum", "sex", "teen", "pm", "fetish", "tit", "boob",
-                "bot", "yummy", "gore", "whore", "ass", "kick", "slut", "horny", "blow", "shit", "erotic", "love", "anime", "hentai"};
-
-        Path FILE_PATH = Paths.get("C:\\Users\\Niels\\Documents\\test\\LIMES-master\\OSRS_Account_Toolkit\\src\\main\\api\\utilities\\users.txt");
-
-        try {
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(FILE_PATH, StandardCharsets.ISO_8859_1));
-
-            for (int i = 0; i < fileContent.size(); i++) {
-                String line = fileContent.get(i);
-                if (line.length() <= 3){
-                    line = "";
-                }
-                String lcaseLine = line.toLowerCase();
-                for (String word : words){
-                    if(lcaseLine.contains(word)){
-                        line = "";
-                        break;
-                    }
-                }
-                line = line.replace("_", " ");
-                line = line.replace("-", " ");
-                line = line.replaceAll("[^\\w\\s]","");
-                if(line.length() > 12)
-                    line = line.substring(0,12);
-                fileContent.set(i, line);
-            }
-            fileContent.removeAll(Arrays.asList("", null));
-
-            Files.write(FILE_PATH, fileContent, StandardCharsets.ISO_8859_1);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
