@@ -33,7 +33,7 @@ public class CaptchaSolver {
         return topX;
     }
 
-    public static boolean verifyIfMatch(int[] actual, int[] predicted){
+    private static boolean verifyIfMatch(int[] actual, int[] predicted){
         for(int correct : actual){
             for(int predict : predicted){
                 if(predict == correct){
@@ -43,47 +43,8 @@ public class CaptchaSolver {
         }
         return false;
     }
-
-    public static int[] get_N_mostFrequentNumber(int[] arr, int N)
-    {
-        Map<Integer,Integer> integersCount = new HashMap<Integer,Integer>();
-
-        for (Integer i : arr){
-            if (!integersCount.containsKey(i))
-                integersCount.put(i, 1);
-            else
-                integersCount.put(i, integersCount.get(i) + 1);
-        }
-
-        int[] topX = new int[N];
-        Arrays.fill(topX, -1);
-
-        for (Map.Entry<Integer, Integer> entry : integersCount.entrySet()) {
-            Integer k = entry.getKey();
-            Integer current = entry.getValue();
-            for(int j=topX.length - 1; j>=0; j--){
-                if (!integersCount.containsKey(topX[j]) || current >= integersCount.get(topX[j])){
-                    if(j == 0){
-                        topX[0] = k;
-                    }
-                    else{
-                        topX[j] = topX[j - 1];
-                    }
-                }
-                else{
-                    if(j != topX.length - 1){
-                        topX[j + 1] = k;
-                    }
-                    break;
-                }
-            }
-        }
-
-        printPredictions(topX);
-        return null;
-    }
-
-    public static void printPredictions(int[] predictions){
+    
+    private static void printPredictions(int[] predictions){
         try {
             List<String> names = new ArrayList<>(Files.readAllLines(labelsPath, StandardCharsets.ISO_8859_1));
             for(int nr : predictions){
